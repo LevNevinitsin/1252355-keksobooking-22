@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Лев Невиницин](https://up.htmlacademy.ru/javascript/22/user/1252355).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Алипкин](https://up.htmlacademy.ru/javascript/22/user/38158).
 
 ---
 
