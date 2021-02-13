@@ -1,4 +1,3 @@
-import { createSimilarRentAds } from './create-similar-rent-ads.js';
+import { generateSimilarAdsMarkup } from './generate-similar-ads-markup.js';
 
-const useSomethingUnusedWithoutConsole = (somethingUnused) => somethingUnused;
-useSomethingUnusedWithoutConsole(createSimilarRentAds());
+generateSimilarAdsMarkup();
