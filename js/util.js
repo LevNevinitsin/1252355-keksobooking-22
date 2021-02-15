@@ -1,7 +1,7 @@
 const getRandomInteger = (minValue, maxValue) => {
   minValue = Math.ceil(minValue);
   maxValue = Math.floor(maxValue);
-  const isRangeCorrect = minValue <= maxValue && minValue >= 0 && maxValue >= 0;
+  const isRangeCorrect = minValue >= 0 && maxValue >= minValue;
 
   return isRangeCorrect ? Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue : null;
 }
@@ -19,11 +19,34 @@ const getRandomFloatNumber = (minValue, maxValue, decimalPlaces) => {
     const roundedNumber = Math.floor(multipliedNumber);
 
     return parseFloat((roundedNumber / divider).toFixed(decimalPlaces));
-  } else {
-    return null
   }
+
+  return null
 }
 
 const getRandomArrayElement = (array) => array[getRandomInteger(0, (array.length - 1))];
 
-export { getRandomInteger, getRandomFloatNumber, getRandomArrayElement };
+const getRandomArray = (array) => {
+  const newArray = [];
+  array.forEach((element) => {
+    if (Math.random() > 0.5) {
+      newArray.push(element);
+    }
+  })
+  return newArray;
+}
+
+const getWordForm = (number, wordForms) => {
+  let lastTwoCharsNum = number % 100;
+  let lastChar = lastTwoCharsNum % 10;
+
+  if (lastTwoCharsNum > 10 && lastTwoCharsNum < 20) { return wordForms[2]; }
+  if (lastChar === 1) { return wordForms[0]; }
+  if (lastChar > 1 && lastChar < 5) { return wordForms[1]; }
+  if (lastChar > 6 && lastChar < 9 && wordForms[3]) { return wordForms[3]; }
+  if (lastTwoCharsNum === 40 && wordForms[4]) { return wordForms[4]; }
+  if ((lastTwoCharsNum === 90 || lastTwoCharsNum === 0) && wordForms[5]) { return wordForms[5]; }
+  return wordForms[2];
+}
+
+export { getRandomInteger, getRandomFloatNumber, getRandomArrayElement, getRandomArray, getWordForm };
