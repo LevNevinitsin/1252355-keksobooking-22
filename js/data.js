@@ -3,9 +3,9 @@ const LOCATION_MIN_LATITUDE = 35.65;
 const LOCATION_MAX_LATITUDE = 35.7;
 const LOCATION_MIN_LONGITUDE = 139.7;
 const LOCATION_MAX_LONGITUDE = 139.8;
-const MAX_RENT_PRICE = 1000000;
-const MAX_ROOMS = 20;
-const MAX_GUESTS = 40;
+const MAX_RENT_PRICE = 100000;
+const MAX_ROOMS = 5;
+const MAX_GUESTS = 5;
 const apartmentsMap = {
   'flat': {
     ruLabel: 'Квартира',
