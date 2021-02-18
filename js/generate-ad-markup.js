@@ -48,7 +48,7 @@ const adTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-const generateAd = (ad) => {
+const generateAdMarkup = (ad) => {
   const {
     author: {avatar},
     offer: {
@@ -83,7 +83,7 @@ const generateAd = (ad) => {
   fillOrRemove(isDataEnough, popupTextTime, timeContent);
 
   const popupFeaturesList = newAd.querySelector('.popup__features');
-  if (features.length > 0) {
+  if (features.length) {
     popupFeaturesList.innerHTML = '';
     popupFeaturesList.appendChild(generateFeaturesList(features));
   } else {
@@ -94,7 +94,7 @@ const generateAd = (ad) => {
   fillOrRemove(description, popupDescription, description)
 
   const popupPhotosList = newAd.querySelector('.popup__photos');
-  if (photos.length > 0) {
+  if (photos.length) {
     const popupPhoto = popupPhotosList.querySelector('.popup__photo');
     popupPhotosList.innerHTML = '';
     popupPhotosList.appendChild(generatePhotosList(photos, popupPhoto));
@@ -112,16 +112,4 @@ const generateAd = (ad) => {
   return newAd;
 }
 
-const adsFragment = document.createDocumentFragment();
-
-const mapCanvas = document.querySelector('.map__canvas');
-
-const generateAdsMarkup = (ads) => {
-  ads.forEach((ad) => {
-    const newAd = generateAd(ad);
-    adsFragment.appendChild(newAd);
-  })
-  mapCanvas.appendChild(adsFragment);
-}
-
-export { generateAdsMarkup }
+export { generateAdMarkup }
