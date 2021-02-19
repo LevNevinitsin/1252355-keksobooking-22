@@ -1,16 +1,14 @@
 /* global L:readonly */
-import { activatePage } from './activity.js';
-import { createAds } from './create-ads.js';
 import { generateAdMarkup } from './generate-ad-markup.js';
+import { setAddress } from './form.js'
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    activatePage();
-  })
-  .setView({
-    lat:35.681700,
-    lng: 139.753882,
-  }, 13);
+const CENTER_LAT = 35.681700;
+const CENTER_LNG = 139.753882;
+const ZOOM = 13;
+const MAIN_MARKER_SIZE = 50;
+const MARKER_SIZE = 40;
+
+const map = L.map('map-canvas');
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -21,14 +19,14 @@ L.tileLayer(
 
 const mainMarkerIcon = L.icon ({
   iconUrl: '../img/main-pin.svg',
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
+  iconSize: [MAIN_MARKER_SIZE, MAIN_MARKER_SIZE],
+  iconAnchor: [MAIN_MARKER_SIZE / 2, MAIN_MARKER_SIZE],
 });
 
 const mainMarker = L.marker(
   {
-    lat:35.681700,
-    lng: 139.753882,
+    lat: CENTER_LAT,
+    lng: CENTER_LNG,
   },
   {
     draggable: true,
@@ -38,15 +36,15 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map)
 
-const address = document.querySelector('#address');
 mainMarker.on('move', (evt) => {
-  address.value = `${evt.target.getLatLng()['lat']}, ${evt.target.getLatLng()['lng']}`
+  const coordinates = [evt.target.getLatLng()['lat'], evt.target.getLatLng()['lng']]
+  setAddress(coordinates);
 })
 
 const markerIcon = L.icon ({
   iconUrl: '../img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [MARKER_SIZE, MARKER_SIZE],
+  iconAnchor: [MARKER_SIZE / 2, MARKER_SIZE],
 });
 
 const markers = [];
@@ -78,14 +76,15 @@ const createMarkers = (ads) => {
   })
 }
 
-const ads = createAds();
-
-createMarkers(ads);
-
 const removeMarkers = () => {
   markers.forEach((marker) => {
     marker.remove();
   })
 }
 
-export { ads, createMarkers, removeMarkers };
+const reCreateMarkers = (ads) => {
+  removeMarkers();
+  createMarkers(ads);
+}
+
+export { CENTER_LAT, CENTER_LNG, ZOOM, map, createMarkers, reCreateMarkers };

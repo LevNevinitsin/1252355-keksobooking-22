@@ -6,6 +6,35 @@ const LOCATION_MAX_LONGITUDE = 139.8;
 const MAX_RENT_PRICE = 100000;
 const MAX_ROOMS = 5;
 const MAX_GUESTS = 5;
+const CHECKIN_CHECKOUT_TIMES = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+const POSSIBLE_FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+const PHOTO_URLS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+];
+const MAX_AVATARS_NUMBER = 8;
+const DESCRIPTION_COMPONENTS = [
+  'Срочно',
+  'Очень чистое жильё',
+  'Пешая доступность от метро',
+  'Развитая инфраструктура: магазины, поликлиники, школа, детский сад',
+  'Тихие соседи',
+  'Спокойный район',
+  'Отличный вид на город',
+  'Возможен торг',
+];
 const apartmentsMap = {
   'flat': {
     ruLabel: 'Квартира',
@@ -23,36 +52,7 @@ const apartmentsMap = {
     ruLabel: 'Дворец',
     price: 10000,
   },
-}
-const CHECKIN_CHECKOUT_TIMES = [
-  '12:00',
-  '13:00',
-  '14:00',
-];
-const POSSIBLE_FEATURES = [
-  'wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner',
-]
-const PHOTO_URLS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
-]
-const MAX_AVATARS_NUMBER = 8;
-const DESCRIPTION_COMPONENTS = [
-  'Срочно',
-  'Очень чистое жильё',
-  'Пешая доступность от метро',
-  'Развитая инфраструктура: магазины, поликлиники, школа, детский сад',
-  'Тихие соседи',
-  'Спокойный район',
-  'Отличный вид на город',
-  'Возможен торг',
-]
+};
 
 export {
   ADS_COUNT,

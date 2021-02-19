@@ -1,115 +1,63 @@
-import { ads, createMarkers, removeMarkers } from './map.js';
+import { ads } from './create-ads.js';
+import { reCreateMarkers } from './map.js';
+import { disableElements, enableElements } from './util.js';
 
-const mapFiltersForm = document.querySelector('.map__filters');
-const selectFilters = mapFiltersForm.querySelectorAll('select');
+const DEFAULT_SELECT_VALUE = 'any';
+const priceFilter = {
+  'middle': (value) => (value >= 10000 && value < 50000),
+  'low': (value) => value < 10000,
+  'high': (value) => value >= 50000,
+  [DEFAULT_SELECT_VALUE]: () => true,
+};
+const filter = document.querySelector('.map__filters');
+const selectFilters = filter.querySelectorAll('select');
+const filterElements = filter.querySelectorAll('select, fieldset');
 
-const isSelectMatched = (selectNumber, adValue) => {
-  if (selectFilters[selectNumber].value === 'any') { return true }
-  else if (selectFilters[selectNumber].value === adValue) { return true }
-  return false;
+const disableFilter = () => {
+  filter.classList.add('.map__filters--disabled');
+  disableElements(filterElements);
 }
 
-const isPriceMatched = (selectNumber, adValue) => {
-  switch (selectFilters[selectNumber].value) {
-    case 'middle':
-      if (adValue >= 10000 & adValue < 50000) { return true }
-      return false;
-    case 'low':
-      if (adValue < 10000) { return true }
-      return false;
-    case 'high':
-      if (adValue >= 50000) { return true }
-      return false;
-    case 'any':
-      return true;
-  }
+const enableFilter = () => {
+  filter.classList.remove('.map__filters--disabled');
+  enableElements(filterElements);
 }
 
-const featuresFilters = mapFiltersForm.querySelectorAll('input');
+const isSelectMatched = (select, selectType, offer) => {
+  const value = select.value;
+  const adValue = offer[selectType];
+  return selectType === 'price' ? priceFilter[value](adValue) : value === DEFAULT_SELECT_VALUE ? true : value === adValue.toString();
+}
 
-const getDemandedFeatures = () => {
-  const demandedFeatures = []
+const isFeaturesMatched = (selectedFeatures, adFeatures) => {
+  return selectedFeatures.every((selectedFeature) => {
+    return adFeatures.includes(selectedFeature);
+  })
+}
 
-  featuresFilters.forEach((featuresFilter) => {
-    if (featuresFilter.checked === true) {
-      demandedFeatures.push(featuresFilter.id.slice(7));
-    }
+const isAdMatched = (offer) => {
+  const isSelectsMatched = Array.from(selectFilters).every((select) => {
+    const selectType = select.name.split('-')[1];
+    return isSelectMatched(select, selectType, offer);
   })
 
-  return demandedFeatures;
+  const selectedFeatures = Array.from(filter.querySelectorAll('input:checked')).map((input) => input.id.split('-')[1]);
+  return isSelectsMatched && isFeaturesMatched(selectedFeatures, offer.features);
 }
 
-const isFeaturesMatched = (demandedFeatures, adFeatures) => {
-  const result = demandedFeatures.every((demandedFeature) => {
-    return adFeatures.includes(demandedFeature)
-  })
-  return result;
-}
-
-const isAdMatched = (ad) => {
-  const {
-    offer: {
-      price,
-      type,
-      rooms: roomsNumber,
-      guests: guestsNumber,
-      features,
-    },
-  } = ad;
-
-  return isSelectMatched(0, type) &&
-    isPriceMatched(1, price) &&
-    isSelectMatched(2, roomsNumber.toString()) &&
-    isSelectMatched(3, guestsNumber.toString()) &&
-    isFeaturesMatched(getDemandedFeatures(), features);
-}
-
-const filter = (ads) => {
+const filterAds = (ads) => {
   const filteredAds = [];
   ads.forEach((ad) => {
-    if (isAdMatched(ad)) { filteredAds.push(ad) }
+    if (isAdMatched(ad.offer)) { filteredAds.push(ad) }
   })
   return filteredAds;
 }
 
-const isAnySelect = (selectFilters) => {
-  for (let selectFilter of selectFilters) {
-    if (selectFilter.value !== 'any') {
-      return false;
-    }
-  }
-  return true;
+const onFilterChange = () => {
+  const filteredAds = filterAds(ads);
+  reCreateMarkers(filteredAds);
 }
 
-const isAnyFeatures = (featuresFilters) => {
-  for (let featuresFilter of featuresFilters) {
-    if (featuresFilter.checked !== false) {
-      return false;
-    }
-  }
-  return true;
-}
+filter.addEventListener('change', onFilterChange);
 
-const isNoFilter = () => {
-  if (isAnySelect(selectFilters) && isAnyFeatures(featuresFilters)) { return true }
-  return false;
-}
-
-const reCreateMarkers = (ads) => {
-  removeMarkers();
-  createMarkers(ads);
-}
-
-const onFilterChange = (evt) => {
-  if (evt.target.nodeName === 'SELECT' || evt.target.nodeName === 'INPUT') {
-    if (isNoFilter()) {
-      reCreateMarkers(ads);
-    } else {
-      reCreateMarkers(filter(ads));
-    }
-  }
-}
-
-mapFiltersForm.addEventListener('change', (evt) => {
-  onFilterChange(evt);
-})
+export { disableFilter, enableFilter };

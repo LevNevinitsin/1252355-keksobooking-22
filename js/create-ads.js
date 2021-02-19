@@ -26,7 +26,7 @@ const createDescription = () => {
   let description = '';
   DESCRIPTION_COMPONENTS.forEach((descriptionComponent) => {
     if (Math.random() > 0.5) {
-      description = description + descriptionComponent + '. ';
+      description = `${description}${descriptionComponent}. `;
     }
   })
   return description.trim();
@@ -77,4 +77,6 @@ const createAd = () => {
 
 const createAds = () => new Array (ADS_COUNT).fill(null).map(() => createAd());
 
-export { createAds };
+const ads = createAds();
+
+export { ads };

@@ -49,4 +49,39 @@ const getWordForm = (number, wordForms) => {
   return wordForms[2];
 }
 
-export { getRandomInteger, getRandomFloatNumber, getRandomArrayElement, getRandomArray, getWordForm };
+const disableElements = (elements) => {
+  elements.forEach((element) => {
+    element.disabled = true;
+  })
+}
+
+const enableElements = (elements) => {
+  elements.forEach((element) => {
+    element.disabled = false;
+  })
+}
+
+const addRedBorder = (element) => {
+  element.classList.add('js-red-border');
+  element.classList.add('js-animate-border');
+
+  element.addEventListener('animationend', () => {
+    element.classList.remove('js-animate-border');
+  }, { once: true });
+}
+
+const removeRedBorder = (element) => {
+  element.classList.remove('js-red-border');
+}
+
+export {
+  getRandomInteger,
+  getRandomFloatNumber,
+  getRandomArrayElement,
+  getRandomArray,
+  getWordForm,
+  disableElements,
+  enableElements,
+  addRedBorder,
+  removeRedBorder
+};
