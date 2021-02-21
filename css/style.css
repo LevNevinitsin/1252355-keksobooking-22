@@ -639,6 +639,28 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
+.ad-form__element .js-red-border,
+.ad-form__element .js-red-border:focus,
+.ad-form__input:focus + .js-red-border,
+.ad-form-header .js-red-border,
+.ad-form-header .js-red-border:focus,
+.ad-form-header__input:focus + .js-red-border {
+  box-shadow: 0 0 4px 4px #ff0000;
+}
+
+.js-animate-border {
+  animation: 0.25s 2 highlight;
+}
+
+@keyframes highlight {
+  0% {
+    box-shadow: none;
+  }
+
+  100% {
+    box-shadow: 0 0 4px 4px #ff0000;
+  }
+}
 
 /* Футер
    ========================================================================== */
