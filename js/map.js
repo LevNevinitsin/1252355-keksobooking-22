@@ -1,10 +1,10 @@
 /* global L:readonly */
 import { generateAdMarkup } from './generate-ad-markup.js';
-import { setAddress } from './form.js'
+import { setAddress } from './form.js';
 
 const CENTER_LAT = 35.681700;
 const CENTER_LNG = 139.753882;
-const ZOOM = 13;
+const ZOOM = 10;
 const MAIN_MARKER_SIZE = 50;
 const MARKER_SIZE = 40;
 
@@ -34,12 +34,12 @@ const mainMarker = L.marker(
   },
 );
 
-mainMarker.addTo(map)
+mainMarker.addTo(map);
 
 mainMarker.on('move', (evt) => {
   const coordinates = [evt.target.getLatLng()['lat'], evt.target.getLatLng()['lng']]
   setAddress(coordinates);
-})
+});
 
 const markerIcon = L.icon ({
   iconUrl: '../img/pin.svg',
@@ -52,8 +52,8 @@ const markers = [];
 const createMarker = (ad) => {
   const marker = L.marker(
     {
-      lat: ad.location['x'],
-      lng: ad.location['y'],
+      lat: ad.location['lat'],
+      lng: ad.location['lng'],
     },
     {
       icon: markerIcon,
@@ -87,4 +87,4 @@ const reCreateMarkers = (ads) => {
   createMarkers(ads);
 }
 
-export { CENTER_LAT, CENTER_LNG, ZOOM, map, createMarkers, reCreateMarkers };
+export { CENTER_LAT, CENTER_LNG, ZOOM, map, mainMarker, createMarkers, reCreateMarkers };

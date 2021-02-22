@@ -1,5 +1,23 @@
-import { apartmentsMap } from './data.js';
 import { getWordForm } from './util.js';
+
+const apartmentsMap = {
+  'flat': {
+    ruLabel: 'Квартира',
+    price: 1000,
+  },
+  'bungalow': {
+    ruLabel: 'Бунгало',
+    price: 0,
+  },
+  'house': {
+    ruLabel: 'Дом',
+    price: 5000,
+  },
+  'palace': {
+    ruLabel: 'Дворец',
+    price: 10000,
+  },
+};
 
 const generateFeaturesList = (features) => {
   const featuresFragment = document.createDocumentFragment();
@@ -68,7 +86,11 @@ const generateAdMarkup = (ad) => {
   const newAd = adTemplate.cloneNode(true);
   newAd.querySelector('.popup__title').textContent = title;
   newAd.querySelector('.popup__text--address').textContent = address;
-  newAd.querySelector('.popup__text--price').textContent = `${price} ₽/ночь`;
+
+  const popupPrice = newAd.querySelector('.popup__text--price')
+  const rate = ' <span>₽/ночь</span>';
+  popupPrice.textContent = `${price}`;
+  popupPrice.insertAdjacentHTML('beforeend', rate);
 
   const popupType = newAd.querySelector('.popup__type');
   fillOrRemove(type, popupType, apartmentsMap[type].ruLabel);
@@ -112,4 +134,4 @@ const generateAdMarkup = (ad) => {
   return newAd;
 }
 
-export { generateAdMarkup }
+export { apartmentsMap, generateAdMarkup }

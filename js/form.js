@@ -1,21 +1,17 @@
-import { apartmentsMap } from './data.js';
+import { apartmentsMap } from './generate-ad-markup.js';
 import { getWordForm, disableElements, enableElements, addRedBorder, removeRedBorder } from './util.js';
 
 const ADDRESS_DIGITS_NUMBER = 5;
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
+const EXTRA_ROOMS_VALUE = 100;
+const EXTRA_GUESTS_VALUE = 0;
 const SYMBOL_WORDS = [
   'символ',
   'символа',
   'символов',
 ];
-const roomsGuestsMap = {
-  '1': [2],
-  '2': [1, 2],
-  '3': [0, 1, 2],
-  '100': [3],
-}
 
 const form = document.querySelector('.ad-form');
 const fieldsets = form.querySelectorAll('fieldset');
@@ -26,11 +22,11 @@ const type = form.querySelector('#type');
 const price = form.querySelector('#price');
 const roomsNumber = form.querySelector('#room_number');
 const guestsNumber = form.querySelector('#capacity');
-const guestsOptions = guestsNumber.querySelectorAll('option');
 const timeIn = form.querySelector('#timein');
 const timeOut = form.querySelector('#timeout');
 const photo = form.querySelector('#images');
 const button = form.querySelector('.ad-form__submit');
+const resetButton = form.querySelector('.ad-form__reset');
 
 const disableForm = () => {
   form.classList.add('.ad-form--disabled');
@@ -107,15 +103,21 @@ const onPriceInput = () => {
 price.addEventListener('input', onPriceInput);
 
 const validateGuests = () => {
-  const roomsValue = roomsNumber.value;
-  const areGuestsSynced = roomsGuestsMap[roomsValue].includes(guestsNumber.selectedIndex)
+  const roomsValue = parseInt(roomsNumber.value);
+  const guestsValue = parseInt(guestsNumber.value);
 
-  if (!areGuestsSynced) {
-    const guestsString = roomsGuestsMap[roomsValue].map((optionIndex) => `"${guestsOptions[optionIndex].textContent}"`).join(', ')
-    guestsNumber.setCustomValidity(`Для выбранного количества комнат доступны варианты: ${guestsString}.`)
+  let areGuestsSynced;
+  let validityMessage;
+
+  if (roomsValue === EXTRA_ROOMS_VALUE) {
+    areGuestsSynced = guestsValue === EXTRA_GUESTS_VALUE;
+    validityMessage = 'Для выбранного количества комнат доступен только вариант "не для гостей".';
   } else {
-    confirmValidation(guestsNumber);
+    areGuestsSynced = guestsValue <= roomsValue && guestsValue !== EXTRA_GUESTS_VALUE;
+    validityMessage = 'Количество гостей должно быть не меньше одного и не должно превышать выбранного количества комнат.';
   }
+
+  !areGuestsSynced ? guestsNumber.setCustomValidity(validityMessage) : confirmValidation(guestsNumber);
 
   guestsNumber.reportValidity();
 };
@@ -152,4 +154,4 @@ const highlightInvalidFields = () => {
 
 button.addEventListener('click', highlightInvalidFields);
 
-export { disableForm, enableForm, setAddress };
+export { form, guestsNumber, resetButton, disableForm, enableForm, setAddress, confirmValidation };
