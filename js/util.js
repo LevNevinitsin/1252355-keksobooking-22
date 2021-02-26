@@ -1,40 +1,5 @@
-const getRandomInteger = (minValue, maxValue) => {
-  minValue = Math.ceil(minValue);
-  maxValue = Math.floor(maxValue);
-  const isRangeCorrect = minValue >= 0 && maxValue >= minValue;
-
-  return isRangeCorrect ? Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue : null;
-}
-
-const getRandomFloatNumber = (minValue, maxValue, decimalPlaces) => {
-  const isRangeCorrect = minValue >= 0 && maxValue >= minValue;
-
-  if (isRangeCorrect) {
-    const divider = Math.pow(10, decimalPlaces);
-    const maxInclusionFix = 1 / Math.pow(10, decimalPlaces);
-
-    const numberForRandom = maxValue - minValue + maxInclusionFix;
-    const rawNumber = Math.random() * numberForRandom + minValue;
-    const multipliedNumber = rawNumber * divider;
-    const roundedNumber = Math.floor(multipliedNumber);
-
-    return parseFloat((roundedNumber / divider).toFixed(decimalPlaces));
-  }
-
-  return null
-}
-
-const getRandomArrayElement = (array) => array[getRandomInteger(0, (array.length - 1))];
-
-const getRandomArray = (array) => {
-  const newArray = [];
-  array.forEach((element) => {
-    if (Math.random() > 0.5) {
-      newArray.push(element);
-    }
-  })
-  return newArray;
-}
+const BORDER_CLASS = 'js-red-border';
+const BORDER_ANIMATION_CLASS = 'js-animate-border';
 
 const getWordForm = (number, wordForms) => {
   let lastTwoCharsNum = number % 100;
@@ -62,23 +27,21 @@ const enableElements = (elements) => {
 }
 
 const addRedBorder = (element) => {
-  element.classList.add('js-red-border');
-  element.classList.add('js-animate-border');
+  element.classList.add(BORDER_CLASS);
+  element.classList.add(BORDER_ANIMATION_CLASS);
 
   element.addEventListener('animationend', () => {
-    element.classList.remove('js-animate-border');
+    element.classList.remove(BORDER_ANIMATION_CLASS);
   }, { once: true });
 }
 
 const removeRedBorder = (element) => {
-  element.classList.remove('js-red-border');
+  if (element.classList.contains(BORDER_CLASS)) {
+    element.classList.remove(BORDER_CLASS);
+  }
 }
 
 export {
-  getRandomInteger,
-  getRandomFloatNumber,
-  getRandomArrayElement,
-  getRandomArray,
   getWordForm,
   disableElements,
   enableElements,

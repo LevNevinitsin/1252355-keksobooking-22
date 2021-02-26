@@ -1,6 +1,7 @@
-import { ads } from './create-ads.js';
 import { reCreateMarkers } from './map.js';
 import { disableElements, enableElements } from './util.js';
+
+const MAX_ADS_COUNT = 10;
 
 const DEFAULT_SELECT_VALUE = 'any';
 const priceFilter = {
@@ -47,17 +48,20 @@ const isAdMatched = (offer) => {
 
 const filterAds = (ads) => {
   const filteredAds = [];
-  ads.forEach((ad) => {
+  let ad;
+  for (let i = 0; i < ads.length; i++) {
+    ad = ads[i];
     if (isAdMatched(ad.offer)) { filteredAds.push(ad) }
-  })
+    if (filteredAds.length === MAX_ADS_COUNT) {return filteredAds}
+  }
   return filteredAds;
 }
 
-const onFilterChange = () => {
+const filterMarkers = (ads) => {
   const filteredAds = filterAds(ads);
   reCreateMarkers(filteredAds);
 }
 
-filter.addEventListener('change', onFilterChange);
+const onFilterChange = (ads) => filterMarkers(ads);
 
-export { disableFilter, enableFilter };
+export { MAX_ADS_COUNT, filter, disableFilter, enableFilter, filterMarkers, onFilterChange };
