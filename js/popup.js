@@ -20,9 +20,11 @@ const cleanPopup = (popup) => {
 
 const onPopupClick = (popup) => () => cleanPopup(popup);
 
-const onWindowKeydown = (popup) => (evt) => {
-  if (evt.code === ESCAPE_CODE) {
-    cleanPopup(popup);
+const onWindowKeydown = (popup) => {
+  return (evt) => {
+    if (evt.code === ESCAPE_CODE) {
+      cleanPopup(popup);
+    }
   }
 }
 

@@ -1,3 +1,4 @@
+/* global ads:readonly */
 import { reCreateMarkers } from './map.js';
 import { disableElements, enableElements } from './util.js';
 
@@ -63,5 +64,9 @@ const filterMarkers = (ads) => {
 }
 
 const onFilterChange = (ads) => filterMarkers(ads);
+
+filter.addEventListener('change', () => {
+  onFilterChange(ads);
+});
 
 export { MAX_ADS_COUNT, filter, disableFilter, enableFilter, filterMarkers, onFilterChange };

@@ -154,4 +154,4 @@ const highlightInvalidFields = () => {
 
 button.addEventListener('click', highlightInvalidFields);
 
-export { form, guestsNumber, resetButton, disableForm, enableForm, setAddress, confirmValidation };
+export { form, price, guestsNumber, resetButton, disableForm, enableForm, setAddress, setPriceAttributes, confirmValidation };
