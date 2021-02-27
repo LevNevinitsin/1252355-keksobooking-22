@@ -37,7 +37,7 @@ const mainMarker = L.marker(
 mainMarker.addTo(map);
 
 mainMarker.on('move', (evt) => {
-  const coordinates = [evt.target.getLatLng()['lat'], evt.target.getLatLng()['lng']]
+  const coordinates = [evt.target.getLatLng().lat, evt.target.getLatLng().lng]
   setAddress(coordinates);
 });
 
@@ -52,8 +52,8 @@ const markers = [];
 const createMarker = (ad) => {
   const marker = L.marker(
     {
-      lat: ad.location['lat'],
-      lng: ad.location['lng'],
+      lat: ad.location.lat,
+      lng: ad.location.lng,
     },
     {
       icon: markerIcon,

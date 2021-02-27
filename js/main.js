@@ -1,16 +1,17 @@
-import { form, resetButton, guestsNumber, disableForm, enableForm, setAddress, confirmValidation } from './form.js';
+import { form, price, resetButton, guestsNumber, disableForm, enableForm, setPriceAttributes, setAddress, confirmValidation } from './form.js';
 import { requestError, postingSuccess, postingError, showPopup  } from './popup.js'
-import { MAX_ADS_COUNT, filter, disableFilter, enableFilter, onFilterChange } from './filter.js';
+import { MAX_ADS_COUNT, filter, disableFilter, enableFilter } from './filter.js';
 import { CENTER_LAT, CENTER_LNG, ZOOM, map, mainMarker, createMarkers, reCreateMarkers } from './map.js';
 import { getData, sendData } from './server.js';
 import { removeRedBorder } from './util.js';
 
+const SERVER_GET = 'https://22.javascript.pages.academy/keksobooking/data';
+const SERVER_POST = 'https://22.javascript.pages.academy/keksobooking';
 const CENTER_COORDINATES = [CENTER_LAT, CENTER_LNG];
 
 disableForm();
 disableFilter();
 
-let ads = [];
 let slicedAds = [];
 
 map
@@ -18,8 +19,8 @@ map
     enableForm();
     setAddress(CENTER_COORDINATES);
     getData(
-      (adsFromServer) => {
-        ads = adsFromServer;
+      (ads) => {
+        window.ads = ads;
         slicedAds = ads.slice(0, MAX_ADS_COUNT)
         createMarkers(slicedAds);
         enableFilter();
@@ -27,6 +28,7 @@ map
       () => {
         showPopup(requestError);
       },
+      SERVER_GET,
     );
   })
   .setView(
@@ -37,16 +39,14 @@ map
     ZOOM,
   );
 
-filter.addEventListener('change', () => {
-  onFilterChange(ads);
-});
-
 const setDefaults = () => {
   form.reset();
   filter.reset();
   reCreateMarkers(slicedAds);
   mainMarker.setLatLng(CENTER_COORDINATES);
   setAddress(CENTER_COORDINATES);
+  price.setCustomValidity('');
+  setPriceAttributes();
   confirmValidation(guestsNumber);
   Array.from(form.elements).forEach((element) => {
     removeRedBorder(element);
@@ -65,6 +65,7 @@ form.addEventListener('submit', (evt) => {
       showPopup(postingError);
     },
     new FormData(evt.target),
+    SERVER_POST,
   );
 });
 

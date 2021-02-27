@@ -1,13 +1,13 @@
-const getData = (onSuccess, onFail) => {
-  fetch('https://22.javascript.pages.academy/keksobooking/data')
+const getData = (onSuccess, onFail, url) => {
+  fetch(url)
     .then((response) => response.ok ? response.json() : onFail())
-    .then((ads) => onSuccess(ads))
+    .then((data) => onSuccess(data))
     .catch(() => onFail());
 }
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (onSuccess, onFail, body, url) => {
   fetch(
-    'https://22.javascript.pages.academy/keksobooking',
+    url,
     {
       method: 'POST',
       body,
