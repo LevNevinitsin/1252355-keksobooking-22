@@ -1,9 +1,8 @@
-/* global ads:readonly */
 import { reCreateMarkers } from './map.js';
-import { disableElements, enableElements } from './util.js';
+import { disableElements, enableElements, throttle } from './util.js';
 
 const MAX_ADS_COUNT = 10;
-
+const INTERVAL = 500;
 const DEFAULT_SELECT_VALUE = 'any';
 const priceFilter = {
   'middle': (value) => (value >= 10000 && value < 50000),
@@ -11,6 +10,7 @@ const priceFilter = {
   'high': (value) => value >= 50000,
   [DEFAULT_SELECT_VALUE]: () => true,
 };
+
 const filter = document.querySelector('.map__filters');
 const selectFilters = filter.querySelectorAll('select');
 const filterElements = filter.querySelectorAll('select, fieldset');
@@ -63,10 +63,10 @@ const filterMarkers = (ads) => {
   reCreateMarkers(filteredAds);
 }
 
-const onFilterChange = (ads) => filterMarkers(ads);
+const onFilterChange = (ads) => throttle(() => filterMarkers(ads), INTERVAL);
 
-filter.addEventListener('change', () => {
-  onFilterChange(ads);
-});
+const setFilterListener = (ads) => {
+  filter.addEventListener('change', onFilterChange(ads));
+}
 
-export { MAX_ADS_COUNT, filter, disableFilter, enableFilter, filterMarkers, onFilterChange };
+export { MAX_ADS_COUNT, filter, disableFilter, enableFilter, filterMarkers, setFilterListener };
