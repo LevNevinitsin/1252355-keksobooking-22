@@ -41,10 +41,37 @@ const removeRedBorder = (element) => {
   }
 }
 
+const throttle = (cb, ms) => {
+  let isCooldown = false;
+  let isCbQueued = false
+
+  const wrapper = () => {
+    if (isCooldown) {
+      isCbQueued = true;
+      return;
+    }
+
+    cb();
+    isCooldown = true;
+
+    setTimeout(() => {
+      isCooldown = false;
+
+      if (isCbQueued) {
+        wrapper();
+        isCbQueued = false;
+      }
+    }, ms);
+  }
+
+  return wrapper;
+}
+
 export {
   getWordForm,
   disableElements,
   enableElements,
   addRedBorder,
-  removeRedBorder
+  removeRedBorder,
+  throttle
 };

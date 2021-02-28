@@ -1,6 +1,6 @@
 import { form, price, resetButton, guestsNumber, disableForm, enableForm, setPriceAttributes, setAddress, confirmValidation } from './form.js';
-import { requestError, postingSuccess, postingError, showPopup  } from './popup.js'
-import { MAX_ADS_COUNT, filter, disableFilter, enableFilter } from './filter.js';
+import { requestError, postingSuccess, postingError, showPopup } from './popup.js';
+import { MAX_ADS_COUNT, filter, disableFilter, enableFilter, setFilterListener } from './filter.js';
 import { CENTER_LAT, CENTER_LNG, ZOOM, map, mainMarker, createMarkers, reCreateMarkers } from './map.js';
 import { getData, sendData } from './server.js';
 import { removeRedBorder } from './util.js';
@@ -18,17 +18,16 @@ map
   .on('load', () => {
     enableForm();
     setAddress(CENTER_COORDINATES);
-    getData(
-      (ads) => {
-        window.ads = ads;
-        slicedAds = ads.slice(0, MAX_ADS_COUNT)
-        createMarkers(slicedAds);
-        enableFilter();
-      },
-      () => {
-        showPopup(requestError);
-      },
-      SERVER_GET,
+    getData((ads) => {
+      setFilterListener(ads);
+      slicedAds = ads.slice(0, MAX_ADS_COUNT)
+      createMarkers(slicedAds);
+      enableFilter();
+    },
+    () => {
+      showPopup(requestError);
+    },
+    SERVER_GET,
     );
   })
   .setView(
