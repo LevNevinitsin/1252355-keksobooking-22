@@ -7,15 +7,21 @@ const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
 const EXTRA_ROOMS_VALUE = 100;
 const EXTRA_GUESTS_VALUE = 0;
+const EXTRA_GUESTS_MESSAGE = 'Для выбранного количества комнат доступен только вариант "не для гостей".';
+const GUESTS_MESSAGE = 'Количество гостей должно быть не меньше одного и не должно превышать выбранного количества комнат.';
+const IMAGE_MESSAGE = 'Выберите файл-изображение.';
 const SYMBOL_WORDS = [
   'символ',
   'символа',
   'символов',
 ];
+const PREVIEW_SIZE = 70;
+const PREVIEW_ALT = 'Превью фотографии жилья';
 
 const form = document.querySelector('.ad-form');
 const fieldsets = form.querySelectorAll('fieldset');
 const avatar = form.querySelector('#avatar');
+const avatarPreview = form.querySelector('.ad-form-header__preview img');
 const title = form.querySelector('#title');
 const address = form.querySelector('#address');
 const type = form.querySelector('#type');
@@ -25,6 +31,8 @@ const guestsNumber = form.querySelector('#capacity');
 const timeIn = form.querySelector('#timein');
 const timeOut = form.querySelector('#timeout');
 const photo = form.querySelector('#images');
+const photoBox = form.querySelector('.ad-form__photo');
+let photoPreview;
 const button = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
 
@@ -111,10 +119,10 @@ const validateGuests = () => {
 
   if (roomsValue === EXTRA_ROOMS_VALUE) {
     areGuestsSynced = guestsValue === EXTRA_GUESTS_VALUE;
-    validityMessage = 'Для выбранного количества комнат доступен только вариант "не для гостей".';
+    validityMessage = EXTRA_GUESTS_MESSAGE;
   } else {
     areGuestsSynced = guestsValue <= roomsValue && guestsValue !== EXTRA_GUESTS_VALUE;
-    validityMessage = 'Количество гостей должно быть не меньше одного и не должно превышать выбранного количества комнат.';
+    validityMessage = GUESTS_MESSAGE;
   }
 
   !areGuestsSynced ? guestsNumber.setCustomValidity(validityMessage) : confirmValidation(guestsNumber);
@@ -128,21 +136,88 @@ const onGuestsNumberChange = () => validateGuests();
 roomsNumber.addEventListener('change', onRoomsNumberChange);
 guestsNumber.addEventListener('change', onGuestsNumberChange);
 
-const validateFile = (input) => {
-  const isImage = input.files[0].type.startsWith('image');
+const isImage = (file) => file.type.startsWith('image');
 
-  if (!isImage) {
-    input.setCustomValidity('Выберите файл-изображение.');
+const setPreviewSrc = (file, block, defaultSrc) => {
+  if (file) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      block.src = reader.result;
+    })
+
+    reader.readAsDataURL(file);
   } else {
-    input.setCustomValidity('');
-    removeRedBorder(input.nextElementSibling);
+    defaultSrc ? block.src = defaultSrc : block.src = '';
   }
-
-  input.reportValidity();
 }
 
-const onAvatarChange = (evt) => validateFile(evt.target);
-const onPhotoChange = (evt) => validateFile(evt.target);
+const confirmImageValidity = (input) => {
+  input.setCustomValidity('');
+  removeRedBorder(input.nextElementSibling);
+}
+
+const confirmAndPreview = (input, file, preview, defaultSrc) => {
+  confirmImageValidity(input);
+  setPreviewSrc(file, preview, defaultSrc);
+}
+
+const defaultAvatar = avatarPreview.src;
+
+const onAvatarChange = () => {
+  const file = avatar.files[0];
+
+  if (!file || isImage(file)) {
+    confirmAndPreview(avatar, file, avatarPreview, defaultAvatar);
+  } else {
+    avatar.setCustomValidity(IMAGE_MESSAGE);
+    if (avatarPreview.src !== defaultAvatar) {
+      avatarPreview.src = defaultAvatar;
+    }
+  }
+
+  avatar.reportValidity();
+}
+
+const isPreviewAdded = () => photoBox.contains(photoPreview);
+
+const removePreview = () => {
+  if (isPreviewAdded()) {
+    photoPreview.remove();
+  }
+}
+
+const resetPhoto = (input) => {
+  confirmImageValidity(input);
+  removePreview();
+}
+
+const onPhotoChange = () => {
+  const file = photo.files[0];
+
+  if (!photoPreview) {
+    photoPreview = document.createElement('img');
+    photoPreview.width = PREVIEW_SIZE;
+    photoPreview.height = PREVIEW_SIZE;
+    photoPreview.alt = PREVIEW_ALT;
+  }
+
+  if (!file) {
+    resetPhoto(photo);
+  } else {
+    if (!isImage(file)) {
+      photo.setCustomValidity(IMAGE_MESSAGE);
+      removePreview();
+    } else {
+      confirmAndPreview(photo, file, photoPreview);
+      if (!isPreviewAdded()) {
+        photoBox.appendChild(photoPreview);
+      }
+    }
+  }
+
+  photo.reportValidity();
+}
 
 avatar.addEventListener('change', onAvatarChange);
 photo.addEventListener('change', onPhotoChange);
@@ -154,4 +229,20 @@ const highlightInvalidFields = () => {
 
 button.addEventListener('click', highlightInvalidFields);
 
-export { form, price, guestsNumber, resetButton, disableForm, enableForm, setAddress, setPriceAttributes, confirmValidation };
+export {
+  form,
+  avatar,
+  avatarPreview,
+  price,
+  guestsNumber,
+  photo,
+  resetButton,
+  disableForm,
+  enableForm,
+  setAddress,
+  setPriceAttributes,
+  defaultAvatar,
+  confirmValidation,
+  confirmAndPreview,
+  resetPhoto
+};
