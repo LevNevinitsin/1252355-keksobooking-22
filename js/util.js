@@ -41,30 +41,16 @@ const removeRedBorder = (element) => {
   }
 }
 
-const throttle = (cb, ms) => {
-  let isCooldown = false;
-  let isCbQueued = false
+const debounce = (cb, ms) => {
+  let timer;
 
-  const wrapper = () => {
-    if (isCooldown) {
-      isCbQueued = true;
-      return;
+  return () => {
+    if (timer) {
+      window.clearTimeout(timer);
     }
 
-    cb();
-    isCooldown = true;
-
-    setTimeout(() => {
-      isCooldown = false;
-
-      if (isCbQueued) {
-        wrapper();
-        isCbQueued = false;
-      }
-    }, ms);
+    timer = setTimeout(() => cb(), ms)
   }
-
-  return wrapper;
 }
 
 export {
@@ -73,5 +59,5 @@ export {
   enableElements,
   addRedBorder,
   removeRedBorder,
-  throttle
+  debounce
 };

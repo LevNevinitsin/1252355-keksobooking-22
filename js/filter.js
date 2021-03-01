@@ -1,5 +1,5 @@
 import { reCreateMarkers } from './map.js';
-import { disableElements, enableElements, throttle } from './util.js';
+import { disableElements, enableElements, debounce } from './util.js';
 
 const MAX_ADS_COUNT = 10;
 const INTERVAL = 500;
@@ -63,7 +63,7 @@ const filterMarkers = (ads) => {
   reCreateMarkers(filteredAds);
 }
 
-const onFilterChange = (ads) => throttle(() => filterMarkers(ads), INTERVAL);
+const onFilterChange = (ads) => debounce(() => filterMarkers(ads), INTERVAL);
 
 const setFilterListener = (ads) => {
   filter.addEventListener('change', onFilterChange(ads));

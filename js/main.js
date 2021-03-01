@@ -1,4 +1,20 @@
-import { form, price, resetButton, guestsNumber, disableForm, enableForm, setPriceAttributes, setAddress, confirmValidation } from './form.js';
+import {
+  form,
+  avatar,
+  avatarPreview,
+  price,
+  photo,
+  defaultAvatar,
+  resetButton,
+  guestsNumber,
+  disableForm,
+  enableForm,
+  setPriceAttributes,
+  setAddress,
+  confirmValidation,
+  confirmAndPreview,
+  resetPhoto
+} from './form.js';
 import { requestError, postingSuccess, postingError, showPopup } from './popup.js';
 import { MAX_ADS_COUNT, filter, disableFilter, enableFilter, setFilterListener } from './filter.js';
 import { CENTER_LAT, CENTER_LNG, ZOOM, map, mainMarker, createMarkers, reCreateMarkers } from './map.js';
@@ -47,6 +63,8 @@ const setDefaults = () => {
   price.setCustomValidity('');
   setPriceAttributes();
   confirmValidation(guestsNumber);
+  confirmAndPreview(avatar, undefined, avatarPreview, defaultAvatar);
+  resetPhoto(photo);
   Array.from(form.elements).forEach((element) => {
     removeRedBorder(element);
   });
