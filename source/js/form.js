@@ -148,7 +148,7 @@ const setPreviewSrc = (file, block, defaultSrc) => {
 
     reader.readAsDataURL(file);
   } else {
-    defaultSrc ? block.src = defaultSrc : block.src = '';
+    block.src = defaultSrc;
   }
 }
 
