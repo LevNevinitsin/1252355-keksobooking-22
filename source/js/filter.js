@@ -33,7 +33,7 @@ const isSelectMatched = (select, selectType, offer) => {
 
 const isFeaturesMatched = (selectedFeatures, adFeatures) => {
   return selectedFeatures.every((selectedFeature) => {
-    return adFeatures.includes(selectedFeature);
+    return adFeatures.includes(selectedFeature.value);
   })
 }
 
@@ -43,7 +43,7 @@ const isAdMatched = (offer) => {
     return isSelectMatched(select, selectType, offer);
   })
 
-  const selectedFeatures = Array.from(filter.querySelectorAll('input:checked')).map((input) => input.id.split('-')[1]);
+  const selectedFeatures = Array.from(filter.querySelectorAll('input:checked'));
   return isSelectsMatched && isFeaturesMatched(selectedFeatures, offer.features);
 }
 

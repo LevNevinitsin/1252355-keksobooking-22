@@ -18,9 +18,9 @@ const cleanPopup = (popup) => {
   window.removeEventListener('keydown', onWindowKeydown);
 }
 
-const onPopupClick = (popup) => () => cleanPopup(popup);
+const createOnPopupClick = (popup) => () => cleanPopup(popup);
 
-const onWindowKeydown = (popup) => {
+const createOnWindowKeydown = (popup) => {
   return (evt) => {
     if (evt.code === ESCAPE_CODE) {
       cleanPopup(popup);
@@ -33,10 +33,13 @@ const onErrorButtonClick = () => {
   errorButton.removeEventListener('click', onErrorButtonClick)
 }
 
+let onPopupClick;
+let onWindowKeydown;
+
 const showPopup = (popup) => {
   main.appendChild(popup);
-  popup.addEventListener('click', onPopupClick(popup));
-  window.addEventListener('keydown', onWindowKeydown(popup));
+  popup.addEventListener('click', onPopupClick = createOnPopupClick(popup));
+  window.addEventListener('keydown', onWindowKeydown = createOnWindowKeydown(popup));
   if (popup.contains(errorButton)) {
     errorButton.addEventListener('click', onErrorButtonClick)
   }

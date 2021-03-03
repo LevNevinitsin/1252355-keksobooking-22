@@ -37,12 +37,12 @@ const button = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
 
 const disableForm = () => {
-  form.classList.add('.ad-form--disabled');
+  form.classList.add('ad-form--disabled');
   disableElements(fieldsets);
 }
 
 const enableForm = () => {
-  form.classList.remove('.ad-form--disabled');
+  form.classList.remove('ad-form--disabled');
   enableElements(fieldsets);
 }
 

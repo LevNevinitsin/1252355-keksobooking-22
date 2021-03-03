@@ -58,6 +58,13 @@ const setDefaults = () => {
   form.reset();
   filter.reset();
   reCreateMarkers(slicedAds);
+  map.setView(
+    {
+      lat: CENTER_LAT,
+      lng: CENTER_LNG,
+    },
+    ZOOM,
+  )
   mainMarker.setLatLng(CENTER_COORDINATES);
   setAddress(CENTER_COORDINATES);
   price.setCustomValidity('');
