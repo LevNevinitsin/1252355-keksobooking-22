@@ -39,7 +39,7 @@ jobs:
         with:
           # в значение GITHUB_TOKEN помещается ссылка на ваш секрет в репозитории
           # в данном случае его название KEY
-          GITHUB_TOKEN: ${{ secrets.MISHKA_BUILD }}
+          GITHUB_TOKEN: ${{ secrets.BUILD }}
           BRANCH: gh-pages
           FOLDER: build
           CLEAN: true
