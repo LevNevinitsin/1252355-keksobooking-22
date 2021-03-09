@@ -4,10 +4,12 @@ name: Project test & build
 # целевые события для запуска
 # в данном случае это push и pull_request, в ветку prod
 on:
+  workflow_dispatch:
+    branches: [ master ]
   push:
-    branches: [ prod ]
+    branches: [ master ]
   pull_request:
-    branches: [ prod ]
+    branches: [ master ]
 
 # выполняемые действия
 jobs:
@@ -37,7 +39,7 @@ jobs:
         with:
           # в значение GITHUB_TOKEN помещается ссылка на ваш секрет в репозитории
           # в данном случае его название KEY
-          GITHUB_TOKEN: ${{ secrets.BUILD }}
-          BRANCH: master
-          FOLDER: public
+          GITHUB_TOKEN: ${{ secrets.MISHKA_BUILD }}
+          BRANCH: gh-pages
+          FOLDER: build
           CLEAN: true
