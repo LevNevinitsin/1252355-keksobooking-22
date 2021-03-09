@@ -18,7 +18,7 @@ L.tileLayer(
 ).addTo(map);
 
 const mainMarkerIcon = L.icon ({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: 'img/main-pin.svg',
   iconSize: [MAIN_MARKER_SIZE, MAIN_MARKER_SIZE],
   iconAnchor: [MAIN_MARKER_SIZE / 2, MAIN_MARKER_SIZE],
 });
@@ -42,7 +42,7 @@ mainMarker.on('move', (evt) => {
 });
 
 const markerIcon = L.icon ({
-  iconUrl: '../img/pin.svg',
+  iconUrl: 'img/pin.svg',
   iconSize: [MARKER_SIZE, MARKER_SIZE],
   iconAnchor: [MARKER_SIZE / 2, MARKER_SIZE],
 });
